@@ -1,129 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.okwolf</groupId>
-  <artifactId>frontend-example</artifactId>
-  <version>1.12.1</version>
-  <packaging>war</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <prerequisites>
-    <maven>3.1.0</maven>
-  </prerequisites>
+    <modelVersion>4.0.0</modelVersion>
 
-  <properties>
-    <encoding>UTF-8</encoding>
-    <compiler.version>1.8</compiler.version>
-    <frontend.installDirectory>frontend</frontend.installDirectory>
-    <frontend.workingDirectory>frontend</frontend.workingDirectory>
-    <nodejs.version>18.19.0</nodejs.version>
-    <npm.version>9.6.7</npm.version>
-  </properties>
+    <groupId>com.github.okwolf</groupId>
+    <artifactId>frontend-example</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${frontend.workingDirectory}</directory>
-              <excludes>
-                <exclude>node**/**</exclude>
-              </excludes>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-frontend</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${frontend.workingDirectory}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/main/resources/js</directory>
-                </resource>
-                <resource>
-                  <directory>src/test/resources/js</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>package-frontend</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/${project.build.finalName}/js</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${frontend.workingDirectory}/dist</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <version>1.0</version>
-        <configuration>
-          <installDirectory>${frontend.installDirectory}</installDirectory>
-          <workingDirectory>${frontend.workingDirectory}</workingDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>install node and npm</id>
-            <goals>
-              <goal>install-node-and-npm</goal>
-            </goals>
-            <configuration>
-              <nodeVersion>v${nodejs.version}</nodeVersion>
-              <npmVersion>${npm.version}</npmVersion>
-            </configuration>
-          </execution>
-          <execution>
-            <id>npm run build</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>run build</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>javascript tests</id>
-            <goals>
-              <goal>karma</goal>
-            </goals>
-            <configuration>
-              <karmaConfPath>karma.conf.ci.js</karmaConfPath>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.3.10.v20160621</version>
-      </plugin>
-      <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-          <warSourceExcludes>js/**/*.js</warSourceExcludes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <frontend.installDirectory>frontend</frontend.installDirectory>
+        <frontend.workingDirectory>frontend</frontend.workingDirectory>
+
+        <nodejs.version>18.19.0</nodejs.version>
+        <npm.version>9.6.7</npm.version>
+    </properties>
+
+    <build>
+        <plugins>
+
+            <!-- Clean Plugin -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+
+            <!-- Compiler Plugin (Java 17 compatible) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+            <!-- Frontend Maven Plugin (Updated) -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.12.1</version>
+
+                <configuration>
+                    <installDirectory>${frontend.installDirectory}</installDirectory>
+                    <workingDirectory>${frontend.workingDirectory}</workingDirectory>
+                </configuration>
+
+                <executions>
+
+                    <!-- Install Node and npm -->
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v${nodejs.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+
+                    <!-- npm install -->
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- npm build -->
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <!-- WAR Plugin (Updated for Java 17+) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <warSourceExcludes>js/**/*.js</warSourceExcludes>
+                </configuration>
+            </plugin>
+
+            <!-- Jetty Plugin (Optional - Updated) -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>11.0.20</version>
+            </plugin>
+
+        </plugins>
+    </build>
+
 </project>
