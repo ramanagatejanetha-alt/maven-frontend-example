@@ -64,7 +64,7 @@ pipeline {
 
         stage('Deploy to Application Server') {
             steps {
-                sshagent(['app-server-ssh']) {
+                sshagent(['App-server']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no $APP_SERVER "
                             docker stop $CONTAINER_NAME || true &&
