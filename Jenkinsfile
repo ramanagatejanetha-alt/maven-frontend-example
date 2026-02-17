@@ -6,9 +6,9 @@ pipeline {
     }
 
     environment {
-        DOCKER_IMAGE = "nagateja96/maven-web-app"
+        DOCKER_IMAGE   = "nagateja96/maven-web-app"
         CONTAINER_NAME = "webapp-container"
-        APP_SERVER = "ubuntu@ip-172-31-92-209"
+        APP_SERVER     = "ubuntu@ip-172-31-92-209"
     }
 
     stages {
@@ -52,7 +52,10 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
+                        docker --version
+                        echo "Logging into DockerHub..."
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        echo "Pushing image..."
                         docker push $DOCKER_IMAGE:latest
                     '''
                 }
