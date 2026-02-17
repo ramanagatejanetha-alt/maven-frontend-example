@@ -8,7 +8,7 @@ pipeline {
     environment {
         DOCKER_IMAGE   = "nagateja96/maven-web-app"
         CONTAINER_NAME = "webapp-container"
-        APP_SERVER     = "ubuntu@ip-172-31-92-209"
+        APP_SERVER     = "ubuntu@172.31.92.209"
     }
 
     stages {
